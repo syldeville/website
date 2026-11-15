@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import Web3Form from '../components/Web3Form.astro';
+import { SITE } from '../site';
+const bars = [
+  ['30%', 'var(--blue)'], ['65%', 'var(--blue)'], ['45%', 'var(--red)'], ['90%', 'var(--red)'],
+  ['55%', 'var(--yellow)'], ['75%', 'var(--yellow)'], ['35%', 'var(--green)'], ['60%', 'var(--green)'],
+  ['20%', '#3a3b42'], ['15%', '#3a3b42'],
+];
+---
+<Base title="Music" current="music" description="Music by Sylvia. Coming soon.">
+  <section class="container" style="padding-block: 48px 96px">
+    <div class="inverse music-hero split">
+      <div class="text" style="flex: 999 1 420px; min-width: 0">
+        <p class="pixel pixel-yellow">Side quest 02 · Now loading</p>
+        <h1>Music is on the way.</h1>
+        <p class="lead" style="margin: 0 0 28px">I'm working on my first tracks. Leave your email and I'll send you a note when they're out.</p>
+        <form class="inline-form" data-web3form data-success="You're on the list!">
+          <input type="hidden" name="access_key" value={SITE.web3formsKey} />
+          <input type="hidden" name="subject" value="Music: notify me" />
+          <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" />
+          <label for="notify" class="visually-hidden">Email address</label>
+          <input id="notify" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+          <button class="btn btn-yellow" type="submit">Notify me</button>
+          <p class="form-status" role="status" aria-live="polite" style="flex-basis:100%"></p>
+        </form>
+      </div>
+      <div style="flex: 1 1 260px">
+        <div class="eq" aria-hidden="true">
+          {bars.map(([h, c]) => <span style={`height:${h};background:${c}`}></span>)}
+        </div>
+        <p class="pixel muted" style="font-size:12px;margin-top:14px">Track 01 · Title TBD</p>
+      </div>
+    </div>
+  </section>
+  <Web3Form />
+</Base>

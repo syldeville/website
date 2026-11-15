@@ -1,0 +1,35 @@
+---
+// Shared submit handler for Web3Forms. Any <form data-web3form> on the page
+// is sent with fetch and shows a status message instead of leaving the site.
+---
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-web3form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.form-status');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const key = (form.elements.namedItem('access_key') as HTMLInputElement)?.value;
+      if (!key || key.startsWith('YOUR_')) {
+        if (status) status.textContent = 'This form isn\'t connected yet. Add a Web3Forms key in src/site.ts.';
+        return;
+      }
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (button) button.disabled = true;
+      if (status) status.textContent = 'Sending…';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const json = await res.json();
+        if (!res.ok || !json.success) throw new Error(json.message);
+        form.reset();
+        if (status) status.textContent = form.dataset.success || 'Thanks! Message sent.';
+      } catch {
+        if (status) status.textContent = 'Something went wrong. Please try again in a moment.';
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  });
+</script>
