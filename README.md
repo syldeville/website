@@ -1,4 +1,4 @@
-# Syl de Ville Studio
+# Syldeville Studio
 
 Personal site for Sylvia: software services, a sewing portfolio and music
 (coming soon). Built with [Astro](https://astro.build) and hosted free on

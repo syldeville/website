@@ -9,7 +9,7 @@ interface Props {
 }
 const {
   title,
-  description = 'Syl de Ville Studio: website consulting, app development, and website creation and maintenance by Sylvia, plus sewing and music.',
+  description = 'Syldeville Studio: website consulting, app development, and website creation and maintenance by Sylvia, plus sewing and music.',
   current,
 } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
@@ -50,7 +50,7 @@ const year = new Date().getFullYear();
           <polygon points="2,12 30,12 16,2" fill="var(--yellow)" />
           <polygon points="9,12 23,12 16,30" fill="var(--green)" opacity="0.85" />
         </svg>
-        Syl de Ville <span>Studio</span>
+        Syldeville <span>Studio</span>
       </a>
       <nav class="nav" aria-label="Main">
         <a href={url('#services')}>Services</a>

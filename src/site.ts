@@ -1,6 +1,6 @@
 // Edit these to update details used across the whole site.
 export const SITE = {
-  name: 'Syl de Ville Studio',
+  name: 'Syldeville Studio',
   owner: 'Sylvia',
   tagline: 'Websites, apps and the occasional side quest.',
   // Get a free access key at https://web3forms.com (enter the email you want
