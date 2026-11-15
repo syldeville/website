@@ -2,7 +2,7 @@
 export const SITE = {
   name: 'Syldeville Studio',
   owner: 'Sylvia',
-  tagline: 'Websites, apps and the occasional side quest.',
+  tagline: 'Apps, sewing and music by Sylvia.',
   // Get a free access key at https://web3forms.com (enter the email you want
   // messages sent to). Paste it here. The key is safe to make public.
   web3formsKey: 'YOUR_WEB3FORMS_ACCESS_KEY',

@@ -1,7 +1,7 @@
 # Syldeville Studio
 
-Personal site for Sylvia: software services, a sewing portfolio and music
-(coming soon). Built with [Astro](https://astro.build) and hosted free on
+Personal site for Sylvia: a showcase of the apps she's made, her sewing
+projects and her music (coming soon). Built with [Astro](https://astro.build) and hosted free on
 GitHub Pages.
 
 ## Run it locally
@@ -16,11 +16,36 @@ npm run dev      # http://localhost:4321
 | What | Where |
 |---|---|
 | Site name, Web3Forms key, GitHub link | `src/site.ts` |
-| Homepage text, services, selected work | `src/pages/index.astro` |
+| Homepage text | `src/pages/index.astro` |
+| Apps | `src/content/apps/*.md` (one file per app; `featured: true` puts it on the homepage) |
+| App screenshots | `public/apps/`, referenced as `image: apps/screenshot.png` |
 | Sewing projects | `src/content/sewing/*.md` (one file per project) |
 | Sewing photos | `public/sewing/`, referenced as `image: sewing/photo.jpg` |
 | Music page | `src/pages/music.astro` |
 | Colors, light and dark themes | `src/styles/global.css` (the tokens at the top) |
+
+### Add an app
+
+Make a new file in `src/content/apps/`, for example `budget-buddy.md`:
+
+```md
+---
+title: Budget Buddy
+kind: iOS app
+date: 2026-08-01
+summary: One sentence about what it does.
+tech: [Swift, SwiftUI]
+url: https://apps.apple.com/...      # optional "Try it" button
+repo: https://github.com/syldeville/... # optional "Source code" button
+image: apps/budget-buddy.png
+imageAlt: The Budget Buddy home screen
+featured: true                       # show on the homepage (up to 3)
+---
+
+What it does, why you made it, what you're proud of.
+```
+
+Delete the `example-app-*.md` files once you've added real ones.
 
 ### Add a sewing project
 

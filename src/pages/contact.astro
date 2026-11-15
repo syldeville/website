@@ -3,14 +3,14 @@ import Base from '../layouts/Base.astro';
 import Web3Form from '../components/Web3Form.astro';
 import { SITE } from '../site';
 ---
-<Base title="Contact" current="contact" description="Get in touch about website consulting, app development, or website creation and maintenance.">
+<Base title="Contact" current="contact" description="Get in touch with Sylvia.">
   <section class="container section split" style="align-items: start; gap: 64px">
     <div class="text">
-      <p class="pixel" style="color: var(--blue-text)">Press start</p>
-      <h1 style="font-size: clamp(40px, 6vw, 56px); line-height: 1.05; margin-bottom: 18px">Let's build something.</h1>
-      <p class="lead" style="margin: 0">Tell me a bit about your project and I'll get back to you soon.</p>
+      <p class="pixel" style="color: var(--blue-text)">Player 2 has entered</p>
+      <h1 style="font-size: clamp(40px, 6vw, 56px); line-height: 1.05; margin-bottom: 18px">Say hi.</h1>
+      <p class="lead" style="margin: 0">Questions about an app or a sewing project, a collaboration idea, or need a hand with a website? Send me a note.</p>
     </div>
-    <form class="media form-grid" data-web3form data-success="Thanks! I'll be in touch soon.">
+    <form class="media form-grid" data-web3form data-success="Thanks! I'll get back to you soon.">
       <input type="hidden" name="access_key" value={SITE.web3formsKey} />
       <input type="hidden" name="subject" value="New message from your website" />
       <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" />
@@ -23,12 +23,13 @@ import { SITE } from '../site';
         <input id="email" name="email" type="email" autocomplete="email" required />
       </div>
       <div class="field full">
-        <label for="service">What do you need?</label>
+        <label for="service">What's it about?</label>
         <select id="service" name="service">
-          <option>Website consulting</option>
-          <option>App development</option>
-          <option>A new website</option>
-          <option>Website care &amp; maintenance</option>
+          <option>Just saying hi</option>
+          <option>One of your apps</option>
+          <option>Sewing</option>
+          <option>Music</option>
+          <option>Help with a website</option>
           <option>Something else</option>
         </select>
       </div>

@@ -1,51 +1,28 @@
 ---
 import Base from '../layouts/Base.astro';
+import AppCard from '../components/AppCard.astro';
 import { getCollection } from 'astro:content';
 import { url } from '../site';
 
-const services = [
-  {
-    title: 'Website consulting',
-    accent: 'var(--blue)',
-    text: 'Audits, tech stack advice and a clear plan before you spend money building.',
-  },
-  {
-    title: 'App development',
-    accent: 'var(--red)',
-    text: 'Web and mobile apps, from first prototype to launch.',
-  },
-  {
-    title: 'Website creation',
-    accent: 'var(--yellow)',
-    text: 'Fast, accessible sites designed around your brand and easy to update.',
-  },
-  {
-    title: 'Care & maintenance',
-    accent: 'var(--green)',
-    text: 'Updates, backups, fixes and small changes on a monthly plan.',
-  },
-];
+const byDate = (a: { data: { date: Date } }, b: { data: { date: Date } }) =>
+  b.data.date.valueOf() - a.data.date.valueOf();
 
-// Replace these with real client and app projects.
-const work = [
-  { title: '[Client project name]', kind: 'Website', text: '[One line on what you built]', tint: 't-blue' },
-  { title: '[App project name]', kind: 'App', text: '[One line on what you built]', tint: 't-red' },
-];
+const allApps = (await getCollection('apps')).sort(byDate);
+const featured = allApps.filter((a) => a.data.featured);
+const apps = (featured.length ? featured : allApps).slice(0, 3);
 
-const sewing = (await getCollection('sewing'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const sewing = (await getCollection('sewing')).sort(byDate).slice(0, 3);
 const tints = ['t-blue', 't-red', 't-yellow'];
 ---
 <Base current="home">
   <section class="container hero">
     <div class="hero-text">
-      <p class="pixel" style="color: var(--blue-text)">Player 1 · Software engineer</p>
-      <h1>I build websites and apps that feel good to use.</h1>
-      <p class="lead">Hi, I'm Sylvia. I help small businesses and creators plan, build and look after their corner of the internet. Off the clock, I sew and make music.</p>
+      <p class="pixel" style="color: var(--blue-text)">Player 1 · Sylvia</p>
+      <h1>I make apps, clothes and music.</h1>
+      <p class="lead">I'm a software engineer who likes building things, in code and out of it. This is where I keep the apps I've made, my sewing projects and, soon, my music.</p>
       <div class="btn-row">
-        <a class="btn btn-primary" href={url('contact/')}><span class="tri" aria-hidden="true">▶</span> Start a project</a>
-        <a class="btn btn-outline" href="#work">See my work</a>
+        <a class="btn btn-primary" href="#apps"><span class="tri" aria-hidden="true">▶</span> See my apps</a>
+        <a class="btn btn-outline" href={url('sewing/')}>Visit the sewing room</a>
       </div>
     </div>
     <div class="hero-art float" aria-hidden="true">
@@ -65,44 +42,38 @@ const tints = ['t-blue', 't-red', 't-yellow'];
     </div>
   </section>
 
-  <section id="services" class="band">
-    <div class="container section">
-      <p class="pixel" style="color: var(--red-text)">Select a save slot</p>
-      <h2 class="section-title">What I can do for you</h2>
-      <div class="grid-cards">
-        {services.map((s, i) => (
-          <article class="slot" style={`--accent: ${s.accent}`}>
-            <span class="slot-num">SLOT {String(i + 1).padStart(2, '0')}</span>
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
+  <nav class="container worlds" aria-label="Sections">
+    <a class="world" href="#apps" style="--accent: var(--blue)">
+      <span class="slot-num">World 1</span>
+      <span class="world-title">Apps</span>
+    </a>
+    <a class="world" href="#sewing" style="--accent: var(--red)">
+      <span class="slot-num">World 2</span>
+      <span class="world-title">Sewing</span>
+    </a>
+    <a class="world" href="#music" style="--accent: var(--yellow)">
+      <span class="slot-num">World 3</span>
+      <span class="world-title">Music</span>
+    </a>
+  </nav>
 
-  <section id="work" class="container section">
+  <section id="apps" class="container section">
     <div class="section-head">
       <div>
-        <p class="pixel" style="color: var(--green-text)">Level select</p>
-        <h2 class="section-title">Selected work</h2>
+        <p class="pixel" style="color: var(--blue-text)">World 1 · Apps</p>
+        <h2 class="section-title">Things I've built</h2>
       </div>
+      <a href={url('apps/')} style="font-weight: 600">All apps →</a>
     </div>
     <div class="grid-work">
-      {work.map((w) => (
-        <article class="work-card">
-          <div class={`placeholder ratio-16-10 ${w.tint}`}>[Project screenshot]</div>
-          <h3>{w.title}</h3>
-          <p>{w.text} · {w.kind}</p>
-        </article>
-      ))}
+      {apps.map((a, i) => <AppCard app={a} tint={tints[i % 3]} />)}
     </div>
   </section>
 
   <section id="sewing" class="inverse">
     <div class="container section split">
       <div class="text">
-        <p class="pixel pixel-yellow">Side quest 01</p>
+        <p class="pixel pixel-yellow">World 2 · Sewing</p>
         <h2 class="section-title" style="margin-bottom: 16px">The sewing room</h2>
         <p class="lead" style="margin: 0 0 28px">Garments, costumes and other projects I've made, with notes on patterns and fabric.</p>
         <a class="btn btn-yellow" href={url('sewing/')}>Browse the portfolio</a>
@@ -122,9 +93,9 @@ const tints = ['t-blue', 't-red', 't-yellow'];
   <section id="music" class="container section">
     <div class="loading-card">
       <div>
-        <p class="pixel" style="color: var(--blue-text)">Side quest 02 · Loading…</p>
+        <p class="pixel" style="color: var(--blue-text)">World 3 · Music · Loading…</p>
         <h2>Music is coming soon</h2>
-        <p class="muted" style="font-size: 18px">I'm working on my first tracks. <a href={url('music/')}>Get notified</a>.</p>
+        <p class="muted" style="font-size: 18px">I'm working on my first tracks. <a href={url('music/')}>Get notified</a> when they're out.</p>
       </div>
       <div class="loader" role="img" aria-label="Loading bar at 60 percent">
         <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="blink"></span><span></span><span></span><span></span><span></span>
@@ -132,13 +103,10 @@ const tints = ['t-blue', 't-red', 't-yellow'];
     </div>
   </section>
 
-  <section class="cta">
-    <div class="container section">
-      <div>
-        <p class="pixel">Press start</p>
-        <h2>Have a project in mind?</h2>
-      </div>
-      <a class="btn btn-white" href={url('contact/')}>Send me a message</a>
+  <section class="container" style="padding-bottom: 96px">
+    <div class="bonus">
+      <p class="pixel" style="color: var(--green-text); margin: 0">Bonus stage</p>
+      <p style="margin: 0; font-size: 18px">I also help friends and small projects with their websites now and then. <a href={url('contact/')}>Say hi</a> if you'd like a hand.</p>
     </div>
   </section>
 </Base>

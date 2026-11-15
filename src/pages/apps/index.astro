@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import AppCard from '../../components/AppCard.astro';
+import { getCollection } from 'astro:content';
+
+const apps = (await getCollection('apps')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const tints = ['t-blue', 't-red', 't-yellow', 't-green'];
+---
+<Base title="Apps" current="apps" description="Apps and other software made by Sylvia.">
+  <section class="container page-hero">
+    <p class="pixel" style="color: var(--blue-text)">World 1 · Apps</p>
+    <h1>Things I've built.</h1>
+    <p class="lead" style="margin: 0">Apps, tools and experiments, newest first.</p>
+  </section>
+  <section class="container" style="padding-bottom: 96px">
+    <div class="grid-work">
+      {apps.map((a, i) => <AppCard app={a} tint={tints[i % 4]} />)}
+    </div>
+  </section>
+</Base>

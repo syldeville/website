@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { url } from '../../site';
+
+export async function getStaticPaths() {
+  const apps = await getCollection('apps');
+  return apps.map((a) => ({ params: { id: a.id }, props: { a } }));
+}
+const { a } = Astro.props;
+const { Content } = await render(a);
+const d = a.data;
+---
+<Base title={d.title} current="apps" description={d.summary}>
+  <div class="container">
+    <p style="margin: 24px 0 0"><a href={url('apps/')}>← All apps</a></p>
+    <article class="app-detail">
+      <p class="pixel" style="color: var(--blue-text)">{d.kind}</p>
+      <h1>{d.title}</h1>
+      <p class="lead" style="margin: 0 0 24px">{d.summary}</p>
+      {(d.url || d.repo) && (
+        <div class="btn-row" style="margin-bottom: 32px">
+          {d.url && <a class="btn btn-primary" href={d.url}><span class="tri" aria-hidden="true">▶</span> Try it</a>}
+          {d.repo && <a class="btn btn-outline" href={d.repo}>Source code</a>}
+        </div>
+      )}
+      <div class="shot">
+        {d.image
+          ? <img src={url(d.image)} alt={d.imageAlt ?? ''} />
+          : <div class="placeholder t-blue" style="height:100%;border-radius:0">[App screenshot]</div>}
+      </div>
+      {d.tech.length > 0 && (
+        <ul class="tags" aria-label="Built with" style="margin-top: 24px">
+          {d.tech.map((t) => <li>{t}</li>)}
+        </ul>
+      )}
+      <div class="prose" style="margin-top: 24px"><Content /></div>
+    </article>
+  </div>
+</Base>

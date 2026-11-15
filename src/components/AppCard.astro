@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../site';
+
+interface Props {
+  app: CollectionEntry<'apps'>;
+  tint?: string;
+}
+const { app, tint = 't-blue' } = Astro.props;
+const d = app.data;
+---
+<a class="work-card" href={url(`apps/${app.id}/`)}>
+  <div class="photo ratio-16-10">
+    {d.image
+      ? <img src={url(d.image)} alt={d.imageAlt ?? ''} loading="lazy" />
+      : <div class={`placeholder ${tint}`} style="height:100%">[App screenshot]</div>}
+  </div>
+  <div class="row">
+    <h3>{d.title}</h3>
+    <span class="cat">{d.kind}</span>
+  </div>
+  <p>{d.summary}</p>
+  {d.tech.length > 0 && (
+    <ul class="tags" aria-label="Built with">
+      {d.tech.map((t) => <li>{t}</li>)}
+    </ul>
+  )}
+</a>
