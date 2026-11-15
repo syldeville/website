@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { url } from '../site';
+
+const services = [
+  {
+    title: 'Website consulting',
+    accent: 'var(--blue)',
+    text: 'Audits, tech stack advice and a clear plan before you spend money building.',
+  },
+  {
+    title: 'App development',
+    accent: 'var(--red)',
+    text: 'Web and mobile apps, from first prototype to launch.',
+  },
+  {
+    title: 'Website creation',
+    accent: 'var(--yellow)',
+    text: 'Fast, accessible sites designed around your brand and easy to update.',
+  },
+  {
+    title: 'Care & maintenance',
+    accent: 'var(--green)',
+    text: 'Updates, backups, fixes and small changes on a monthly plan.',
+  },
+];
+
+// Replace these with real client and app projects.
+const work = [
+  { title: '[Client project name]', kind: 'Website', text: '[One line on what you built]', tint: 't-blue' },
+  { title: '[App project name]', kind: 'App', text: '[One line on what you built]', tint: 't-red' },
+];
+
+const sewing = (await getCollection('sewing'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+const tints = ['t-blue', 't-red', 't-yellow'];
+---
+<Base current="home">
+  <section class="container hero">
+    <div class="hero-text">
+      <p class="pixel" style="color: var(--blue-text)">Player 1 · Software engineer</p>
+      <h1>I build websites and apps that feel good to use.</h1>
+      <p class="lead">Hi, I'm Sylvia. I help small businesses and creators plan, build and look after their corner of the internet. Off the clock, I sew and make music.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href={url('contact/')}><span class="tri" aria-hidden="true">▶</span> Start a project</a>
+        <a class="btn btn-outline" href="#work">See my work</a>
+      </div>
+    </div>
+    <div class="hero-art float" aria-hidden="true">
+      <svg viewBox="0 0 360 360" style="perspective: 800px">
+        <g class="gem">
+          <polygon points="180,20 300,110 180,160" fill="#2B4BD8" />
+          <polygon points="180,20 60,110 180,160" fill="#4A68F0" />
+          <polygon points="60,110 180,160 120,280" fill="#E5383B" />
+          <polygon points="300,110 180,160 240,280" fill="#F5B700" />
+          <polygon points="180,160 120,280 240,280" fill="#14A05A" />
+          <polygon points="120,280 240,280 180,340" fill="#0E7A44" />
+          <polygon points="60,110 120,280 40,220" fill="#B82326" />
+          <polygon points="300,110 240,280 320,220" fill="#D39A00" />
+        </g>
+        <ellipse cx="180" cy="352" rx="90" ry="6" fill="currentColor" opacity="0.08" />
+      </svg>
+    </div>
+  </section>
+
+  <section id="services" class="band">
+    <div class="container section">
+      <p class="pixel" style="color: var(--red-text)">Select a save slot</p>
+      <h2 class="section-title">What I can do for you</h2>
+      <div class="grid-cards">
+        {services.map((s, i) => (
+          <article class="slot" style={`--accent: ${s.accent}`}>
+            <span class="slot-num">SLOT {String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="container section">
+    <div class="section-head">
+      <div>
+        <p class="pixel" style="color: var(--green-text)">Level select</p>
+        <h2 class="section-title">Selected work</h2>
+      </div>
+    </div>
+    <div class="grid-work">
+      {work.map((w) => (
+        <article class="work-card">
+          <div class={`placeholder ratio-16-10 ${w.tint}`}>[Project screenshot]</div>
+          <h3>{w.title}</h3>
+          <p>{w.text} · {w.kind}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="sewing" class="inverse">
+    <div class="container section split">
+      <div class="text">
+        <p class="pixel pixel-yellow">Side quest 01</p>
+        <h2 class="section-title" style="margin-bottom: 16px">The sewing room</h2>
+        <p class="lead" style="margin: 0 0 28px">Garments, costumes and other projects I've made, with notes on patterns and fabric.</p>
+        <a class="btn btn-yellow" href={url('sewing/')}>Browse the portfolio</a>
+      </div>
+      <div class="media thumbs">
+        {sewing.map((p, i) => (
+          <a href={url(`sewing/${p.id}/`)} aria-label={p.data.title}>
+            {p.data.image
+              ? <img src={url(p.data.image)} alt={p.data.imageAlt ?? ''} loading="lazy" />
+              : <div class={`placeholder ${tints[i % 3]}`} style="height:100%;border-radius:0">[Photo]</div>}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="music" class="container section">
+    <div class="loading-card">
+      <div>
+        <p class="pixel" style="color: var(--blue-text)">Side quest 02 · Loading…</p>
+        <h2>Music is coming soon</h2>
+        <p class="muted" style="font-size: 18px">I'm working on my first tracks. <a href={url('music/')}>Get notified</a>.</p>
+      </div>
+      <div class="loader" role="img" aria-label="Loading bar at 60 percent">
+        <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="blink"></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container section">
+      <div>
+        <p class="pixel">Press start</p>
+        <h2>Have a project in mind?</h2>
+      </div>
+      <a class="btn btn-white" href={url('contact/')}>Send me a message</a>
+    </div>
+  </section>
+</Base>

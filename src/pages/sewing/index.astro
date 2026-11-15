@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { url } from '../../site';
+
+const projects = (await getCollection('sewing')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const categories = ['All', 'Garments', 'Costumes', 'Accessories', 'Home'];
+const tint: Record<string, string> = {
+  Garments: 't-blue', Costumes: 't-red', Accessories: 't-yellow', Home: 't-green',
+};
+---
+<Base title="Sewing" current="sewing" description="Sewing portfolio: garments, costumes and other projects by Sylvia.">
+  <section class="container page-hero">
+    <p class="pixel" style="color: var(--red-text)">Side quest 01 · The sewing room</p>
+    <h1>Things I've made with fabric and thread.</h1>
+    <p class="lead" style="margin: 0">Each project lists the pattern, fabric and what I'd change next time.</p>
+  </section>
+
+  <section class="container" style="padding-bottom: 96px">
+    <div class="filters" role="group" aria-label="Filter projects">
+      {categories.map((c) => (
+        <button type="button" data-filter={c} aria-pressed={c === 'All' ? 'true' : 'false'}>{c}</button>
+      ))}
+    </div>
+    <div class="grid-sewing">
+      {projects.map((p) => (
+        <a class="sew-card" href={url(`sewing/${p.id}/`)} data-category={p.data.category}>
+          <div class="photo">
+            {p.data.image
+              ? <img src={url(p.data.image)} alt={p.data.imageAlt ?? ''} loading="lazy" />
+              : <div class={`placeholder ${tint[p.data.category]}`} style="height:100%;border-radius:0">[Project photo]</div>}
+          </div>
+          <div class="row">
+            <h2>{p.data.title}</h2>
+            <span class="cat">{p.data.category}</span>
+          </div>
+          <p>{[p.data.pattern, p.data.fabric].filter(Boolean).join(' · ') || p.data.summary}</p>
+        </a>
+      ))}
+    </div>
+    <p id="empty" class="muted" hidden>Nothing in this category yet.</p>
+  </section>
+
+  <script>
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('[data-category]');
+    const empty = document.getElementById('empty')!;
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const f = btn.dataset.filter;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        let shown = 0;
+        cards.forEach((c) => {
+          const show = f === 'All' || c.dataset.category === f;
+          c.hidden = !show;
+          if (show) shown++;
+        });
+        empty.hidden = shown > 0;
+      })
+    );
+  </script>
+</Base>

@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { url } from '../../site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('sewing');
+  return projects.map((p) => ({ params: { id: p.id }, props: { p } }));
+}
+const { p } = Astro.props;
+const { Content } = await render(p);
+const d = p.data;
+---
+<Base title={d.title} current="sewing" description={d.summary}>
+  <div class="container">
+    <p style="margin: 24px 0 0"><a href={url('sewing/')}>← Back to the sewing room</a></p>
+    <article class="project">
+      <div class="photo">
+        {d.image
+          ? <img src={url(d.image)} alt={d.imageAlt ?? ''} />
+          : <div class="placeholder t-blue" style="height:100%;border-radius:0">[Project photo]</div>}
+      </div>
+      <div class="body">
+        <p class="pixel" style="color: var(--red-text)">{d.category}</p>
+        <h1>{d.title}</h1>
+        <p class="lead" style="margin: 0">{d.summary}</p>
+        <dl class="facts">
+          {d.pattern && <><dt>Pattern</dt><dd>{d.pattern}</dd></>}
+          {d.fabric && <><dt>Fabric</dt><dd>{d.fabric}</dd></>}
+          <dt>Finished</dt><dd>{d.date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })}</dd>
+        </dl>
+        <div class="prose"><Content /></div>
+      </div>
+    </article>
+  </div>
+</Base>
